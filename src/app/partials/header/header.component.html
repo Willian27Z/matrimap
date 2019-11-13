@@ -1,0 +1,61 @@
+<!--Visitor Menu-->
+
+<div *ngIf="!isAuthenticated">
+    <div *ngIf="handset">
+        <h1 style="text-align: center" >
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Matrimap</a>
+        </h1>
+        <nav class="welcome-nav" *ngIf="!isAuthenticated && handset" [ngStyle]="{'justify-content': handset ? 'space-evenly' : 'center'}">
+            <a mat-button color="primary" class="main-nav-item" routerLink="connexion" routerLinkActive="active">Connexion</a>
+            <a mat-button color="primary" class="main-nav-item" routerLink="inscription" routerLinkActive="active">Inscription</a>
+            <a mat-button color="primary" class="main-nav-item" routerLink="about" routerLinkActive="active">À propos</a>
+        </nav>
+    </div>
+
+    <div *ngIf="!handset">
+        <mat-toolbar>
+            <span>
+                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Matrimap</a>
+            </span>
+            <span class="spacer"></span>
+            <span>
+                <nav class="welcome-nav">
+                    <a mat-button color="primary" class="main-nav-item" routerLink="connexion" routerLinkActive="active">Connexion</a>
+                    <a mat-button color="primary" class="main-nav-item" routerLink="inscription" routerLinkActive="active">Inscription</a>
+                    <a mat-button color="primary" class="main-nav-item" routerLink="about" routerLinkActive="active">À propos</a>
+                </nav>
+            </span>
+        </mat-toolbar>
+    </div>
+</div>
+
+<!--Member Menu-->
+
+<div *ngIf="isAuthenticated">
+    <mat-toolbar>
+        <span><a routerLink="/" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}">Matrimap</a></span>
+        <span class="spacer"></span>
+        <!-- <span>
+            <mat-form-field floatLabel="never">
+                <input matInput type="search" placeholder="Rechercher">
+            </mat-form-field>
+        </span> -->
+        <span><a mat-icon-button color="primary" (click)="deconnexion()" aria-hidden="false" aria-label="deconnexion">
+            <mat-icon>power_settings_new</mat-icon></a></span>
+    </mat-toolbar>
+    
+    <nav class="main-nav">
+        <a mat-icon-button color="primary" routerLink="monspace" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <mat-icon aria-hidden="false" aria-label="Accueil">home</mat-icon>
+        </a>
+        <a mat-icon-button color="primary" routerLink="amis" routerLinkActive="active"><mat-icon aria-hidden="false" aria-label="Accueil">people</mat-icon></a>
+        <a mat-icon-button color="primary" routerLink="messagerie" routerLinkActive="active"><mat-icon aria-hidden="false" aria-label="Accueil">mail</mat-icon></a>
+        <a mat-icon-button color="primary" routerLink="chat" routerLinkActive="active"><mat-icon aria-hidden="false" aria-label="Accueil">chat</mat-icon></a>
+        <a mat-icon-button color="primary" routerLink="profil" routerLinkActive="active">
+            <mat-icon aria-hidden="false" aria-label="Accueil">settings</mat-icon>
+        </a>
+        <a mat-icon-button color="primary" routerLink="about" routerLinkActive="active">
+            <mat-icon aria-hidden="false" aria-label="information">info</mat-icon>
+        </a>
+    </nav>
+</div>

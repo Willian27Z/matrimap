@@ -1,0 +1,62 @@
+<p>Remplissez le formulaire ci-dessous pour créer votre compte.</p>
+
+<div *ngIf="isLoading">
+    <mat-progress-spinner class="" color="primary" mode="indetermined"></mat-progress-spinner>
+</div>
+
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="login-form" *ngIf="!isLoading">
+    <mat-form-field class="login-input-form">
+        <input matInput placeholder="Prénom" formControlName="firstName">
+        <mat-error *ngIf="signupForm.controls.firstName.hasError('required')">
+            Le prénom est obligatoire
+        </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="login-input-form">
+        <input matInput placeholder="Nom" formControlName="lastName">
+        <mat-error *ngIf="signupForm.controls.lastName.hasError('required')">
+                Le Nom est obligatoire
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="login-input-form">
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-hint>Votre email ne sera partagé avec personne</mat-hint>
+        <mat-error *ngIf="signupForm.controls.email.hasError('email') && !signupForm.controls.email.hasError('required')">
+            Adresse email pas valide.
+        </mat-error>
+        <mat-error *ngIf="signupForm.controls.email.hasError('required')">
+            L'adresse email est <strong>obligatoire</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="login-input-form">
+        <input matInput placeholder="Nom d'utilisateur" formControlName="username">
+        <mat-hint>Ce nom sera visible auprès des autres utilisateurs</mat-hint>
+        <mat-error *ngIf="signupForm.controls.username.hasError('minLength') && !signupForm.controls.username.hasError('required')">
+            Le nom d'utilisateur doit contenir au moin 3 caractères
+        </mat-error>
+        <mat-error *ngIf="signupForm.controls.username.hasError('required')">
+            Un nom d'utilisateur est <strong>obligatoire</strong>
+        </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="login-form">
+        <input matInput type="password" placeholder="Mot de Passe" formControlName="password">
+        <mat-hint>Minimum 6 caractères</mat-hint>
+        <mat-error *ngIf="signupForm.controls.password.hasError('minLength') && !signupForm.controls.password.hasError('required')">
+            Le mot de passe doit contenir au moin 6 caractères
+        </mat-error>
+        <mat-error *ngIf="signupForm.controls.password.hasError('required')">
+            Le mot de passe est <strong>obligatoire</strong>
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field class="login-form">
+        <input matInput type="password" placeholder="Confirmez le Mot de Passe" formControlName="password2">
+    </mat-form-field>
+    <mat-error *ngIf="signupForm.hasError('passwordsDontMatch')">
+        Les mot de passe ne correspondent pas
+    </mat-error>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!signupForm.valid">Connexion</button>
+</form>

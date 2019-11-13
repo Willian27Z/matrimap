@@ -1,0 +1,27 @@
+<p style="text-align: center;">Entrez vos informations pour vous connecter</p>
+
+<div *ngIf="isLoading">
+    <mat-progress-spinner class="" color="primary" mode="indetermined"></mat-progress-spinner>
+</div>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" *ngIf="!isLoading">
+  <mat-form-field class="login-input-form">
+    <input matInput placeholder="Email" formControlName="emailFormControl"
+    [errorStateMatcher]="matcher">
+    <mat-hint>Votre email ne sera partagé avec personne.</mat-hint>
+    <mat-error *ngIf="loginForm.controls.emailFormControl.hasError('email') && !loginForm.controls.emailFormControl.hasError('required')">
+      Adresse email pas valide.
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls.emailFormControl.hasError('required')">
+    Email est <strong>obligatoire</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="login-form">
+    <input matInput type="password" placeholder="Mot-de-Passe" formControlName="passwordFormControl">
+  </mat-form-field>
+  
+  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Connexion</button>
+</form>
+
+<p><a routerLink="/motdepasse">Mot de Passe oublié?</a></p>

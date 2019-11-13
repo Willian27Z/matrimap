@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+// $theme-colors: (
+//   "primary": #007856,
+//   "danger": #ff4136
+// );
+
+// @import "../node_modules/bootstrap/scss/bootstrap.scss";
+html, body { height: 100%; }
+body { font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
