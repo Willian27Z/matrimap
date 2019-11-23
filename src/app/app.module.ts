@@ -1,11 +1,11 @@
 // Angular Modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+//import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Material Modules
@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@angular/cdk/layout';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
@@ -21,6 +22,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog'; 
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // My components
 import { AppComponent } from './app.component';
@@ -39,6 +45,9 @@ import { FriendsComponent } from './pages/friends/friends.component';
 import { MessagesComponent } from './pages/messages/messages.component';
 import { DiscussionComponent } from './pages/discussion/discussion.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { NotificationComponent } from './partials/notification/notification.component'
+import { AuthInterceptorService } from './services/auth-interceptor.service';
+import { ConfirmationDialog, MessageDialog, CommentDialog, RecommandationDialog } from './partials/dialogs/dialogs.component';
 
 @NgModule({
   declarations: [
@@ -57,13 +66,18 @@ import { ChatComponent } from './pages/chat/chat.component';
     FriendsComponent,
     MessagesComponent,
     DiscussionComponent,
-    ChatComponent
+    ChatComponent,
+    NotificationComponent,
+    MessageDialog,
+    CommentDialog,
+    ConfirmationDialog,
+    RecommandationDialog
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FontAwesomeModule,
+    //FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -77,9 +91,25 @@ import { ChatComponent } from './pages/chat/chat.component';
     MatListModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    MatGridListModule,
+    MatCardModule,
+    MatDialogModule,
+    TextFieldModule,
+    MatSnackBarModule
   ],
-  providers: [{provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}],
+  entryComponents: [
+    MessageDialog,
+    CommentDialog,
+    ConfirmationDialog,
+    RecommandationDialog,
+    NotificationComponent
+  ],
+  providers: [
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

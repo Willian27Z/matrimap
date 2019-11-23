@@ -1,1 +1,90 @@
-<p>scrapbook works!</p>
+<mat-toolbar>
+    <img mat-card-avatar class="example-header-image" *ngIf="profile && profile.avatar" [src]="profile.avatar" alt="profile picture">
+    <span>{{profile? profile.pseudo : 'Chargement...'}}</span>
+    <span class="spacer"></span>
+    <span style="overflow: visible;" *ngIf="profile && ( !profile.friend || profile.friend === 'recommandation')">
+        <button mat-mini-fab class="plus-button" color="primary" aria-label="Ajouter amis" (click)="inviteFriend(profile.userID)">
+            <mat-icon>person_add</mat-icon>
+        </button>
+    </span>
+    <span style="overflow: visible;" *ngIf="profile && profile.friend === 'invited'">
+        <button mat-mini-fab class="plus-button" color="accent" aria-label="Ajouter amis" (click)="acceptFriend(profile.userID, 'scrapbook')">
+            <mat-icon>person_add</mat-icon>
+        </button>
+    </span>
+</mat-toolbar>
+<span style="overflow: visible;" class="amis-attente" *ngIf="profile && profile.friend === 'confirmed'">Amis depuis le {{profile.friendSince | date:"dd/MM/yy"}}</span>
+<span style="overflow: visible;" class="amis-attente" *ngIf="profile && profile.friend === 'waiting'">(demande d'amis en attente)</span>
+<span style="overflow: visible;" class="amis-attente" *ngIf="profile && profile.friend === 'recommandation'">Recommandé par {{profile.recommendedBy}}</span>
+
+<div *ngIf="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate" aria-label="chargement de données" style="margin: auto;"></mat-progress-spinner>
+</div>
+
+<mat-tab-group mat-align-tabs="center" *ngIf="!loading">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">sms</mat-icon>
+        </ng-template>
+        <div class="section-header">
+            <h3 class="section-title">Mur de Messages</h3>
+            <span style="overflow: visible;" *ngIf="profile && profile.friend === 'confirmed'">
+                <button mat-mini-fab class="plus-button" color="accent" (click)="newMessageDialog()" aria-label="Ajouter sur Mur">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </span>
+        </div>
+        <div class="message" *ngFor="let message of messages">
+            <mat-card class="message-card">
+                <mat-card-header>
+                    <img mat-card-avatar class="example-header-image" *ngIf="message.avatar" [src]="message.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + message.author">{{message.userName}}</a></mat-card-title>
+                    <mat-card-subtitle>Le {{message.date | date:"dd/MM/yy"}} à {{message.date | date:"H:mm"}}</mat-card-subtitle>
+                </mat-card-header>
+                <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+                <mat-card-content>
+                    <p>{{message.message}}</p>
+                    <mat-divider></mat-divider>
+                    <div *ngFor="let comment of message.comments" style="padding-left: 10px; padding-top: 10px;">
+                        <p>{{comment.userName}} a répondu:</p>
+                        <p>"{{comment.comment}}"</p>
+                        <mat-divider></mat-divider>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions *ngIf="profile.friend === 'confirmed' || admin">
+                    <button mat-raised-button color="primary"  (click)="newCommentDialog(message)">Commenter {{message.comments.length ? '(' + message.comments.length + ')' : '' }}</button>
+                    <!-- <button mat-raised-button color="accent" *ngIf="message.editable"><mat-icon>edit</mat-icon></button> -->
+                    <button mat-raised-button color="warn" *ngIf="message.editable" (click)="deleteMessage(message)"><mat-icon>delete</mat-icon></button>
+                </mat-card-actions>
+              </mat-card>
+              
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">group</mat-icon>
+        </ng-template>
+        <h3>Amis de {{profile? profile.pseudo : ""}}</h3>
+        <mat-list>
+            <div *ngFor="let friend of friends">
+                <mat-card *ngIf="friend.status === 'confirmed'">
+                    <mat-card-header>
+                        <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                        <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                    </mat-card-header>
+                </mat-card>        
+            </div>
+        </mat-list>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">person_pin</mat-icon>
+        </ng-template>
+        <h3>Profil</h3>
+        <mat-list>
+            <mat-list-item> Nom: {{profile? profile.nom : 'privé'}} </mat-list-item>
+            <mat-list-item> Prénom: {{profile? profile.prenom : 'privé'}} </mat-list-item>
+            <mat-list-item> Email: {{profile? profile.email : 'privé'}} </mat-list-item>
+        </mat-list>
+    </mat-tab>
+</mat-tab-group>

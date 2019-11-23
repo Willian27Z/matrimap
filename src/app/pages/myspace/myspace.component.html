@@ -1,1 +1,81 @@
-<p>myspace works!</p>
+<mat-toolbar>
+    <img mat-card-avatar class="example-header-image" *ngIf="profile && profile.avatar" [src]="profile.avatar" alt="profile picture">
+    <span>Mon Space</span>
+</mat-toolbar>
+
+<div *ngIf="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate" aria-label="chargement de données" style="margin: auto;"></mat-progress-spinner>
+</div>
+
+<mat-tab-group *ngIf="handset && !loading" mat-align-tabs="center">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">sms</mat-icon>
+        </ng-template>
+        <div class="section-header">
+            <span class="section-title">Mur de Messages</span>
+            <span style="overflow: visible;">
+                <button mat-mini-fab class="plus-button" color="accent" (click)="newMessageDialog()" aria-label="Ajouter sur Mur">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </span>
+        </div>
+        <div class="message" *ngFor="let message of myMessages">
+            <mat-card class="message-card">
+                <mat-card-header>
+                    <img mat-card-avatar class="example-header-image" *ngIf="message.avatar" [src]="message.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + message.author">{{message.userName}}</a></mat-card-title>
+                    <mat-card-subtitle>Le {{message.date | date:"dd/MM/yy"}} à {{message.date | date:"H:mm"}}</mat-card-subtitle>
+                </mat-card-header>
+                <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+                <mat-card-content>
+                    <p>{{message.message}}</p>
+                    <mat-divider></mat-divider>
+                    <div *ngFor="let comment of message.comments" style="padding-left: 10px; padding-top: 10px;">
+                        <p>{{comment.userName}} a répondu:</p>
+                        <p>"{{comment.comment}}"</p>
+                        <mat-divider></mat-divider>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" (click)="newCommentDialog(message)">Commenter {{message.comments.length ? '(' + message.comments.length + ')' : '' }}</button>
+                    <!-- <button mat-raised-button color="accent" *ngIf="message.editable"><mat-icon>edit</mat-icon></button> -->
+                    <button mat-raised-button color="warn" (click)="deleteMessage(message)"><mat-icon>delete</mat-icon></button>
+                </mat-card-actions>
+            </mat-card>
+              
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">public</mat-icon>
+        </ng-template>
+        <h3>Activité des mes amis</h3>
+        <p>...</p>
+    </mat-tab>
+</mat-tab-group>
+
+<div *ngIf="!handset">
+    
+    <mat-grid-list cols="2" rowHeight="1:1">
+        <mat-grid-tile class="colonne">
+            <mat-grid-tile-header>
+                <h3>Mur de Messages</h3>
+                <button mat-mini-fab color="accent" aria-label="Ajouter sur Mur" (click)="console.log('clicked!')">
+                    <mat-icon>add</mat-icon>
+                </button>    
+            </mat-grid-tile-header>
+            <div class="message" *ngFor="let message of myMessages">
+                <p>Message de <strong>{{message.author}}</strong> le {{message.date}}</p>
+                <p>{{message.message}}</p>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="colonne">
+            <mat-grid-tile-header>
+                <h1>Activité des mes amis</h1>
+            </mat-grid-tile-header>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit blanditiis dolorum nobis debitis, tempore possimus inventore eveniet perspiciatis? Sed voluptates quae sequi rerum sunt. Voluptatibus sint exercitationem quas non! Eligendi?</p>
+        </mat-grid-tile>
+    </mat-grid-list>
+          
+</div>

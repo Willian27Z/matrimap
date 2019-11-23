@@ -1,0 +1,13 @@
+<h1 mat-dialog-title style="text-align: center;">Ecrivez {{data.recipient ? "à " + data.recipient : "sur votre Mur"}}</h1>
+<div mat-dialog-content style="text-align: center;">
+  <p style="text-align: center;">Vous voulez dire quelque chose?</p>
+  <mat-form-field width="80%" style="min-width: 150px; max-width: 500px; width: 100%; ">
+    <textarea matInput  rows="5"
+    [(ngModel)]="data.message"
+    cdkTextareaAutosize></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-button [mat-dialog-close]="data.message" cdkFocusInitial>Envoyer</button>
+</div>

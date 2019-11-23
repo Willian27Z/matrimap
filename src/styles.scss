@@ -5,8 +5,43 @@
 //   "danger": #ff4136
 // );
 
+// * {
+//     &:active,
+//     :focus {
+//       outline: none !important;  // 1
+//     }
+// }
+
 // @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+// @import "../node_modules/bootstrap/scss/functions";
+// @import "../node_modules/bootstrap/scss/variables";
+// @import "../node_modules/bootstrap/scss/mixins";
+// @import "../node_modules/bootstrap/scss/reboot";
+// @import "../node_modules/bootstrap/scss/grid";
+
+
 html, body { height: 100%; }
 body { font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.notif-success {
+    background: darkseagreen;
+    color: darkgreen;
+}
+
+.notif-error {
+    background: hotpink;
+    color: maroon;
+}
+
+.notif-warning {
+    background: burlywood;
+    color: olive;
+}
+
+.notif-neutral {
+    background: white;
+    color: black;
+}
 
 @import '@angular/material/prebuilt-themes/deeppurple-amber.css';

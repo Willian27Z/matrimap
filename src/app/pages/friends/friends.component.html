@@ -1,1 +1,99 @@
-<p>friends works!</p>
+<mat-toolbar>
+    <span>Mes Amis</span>
+</mat-toolbar>
+
+<!-- <button mat-button (click)="testNotif()">Notifier</button> -->
+
+<mat-form-field class="">
+    <input matInput placeholder="Rechercher" [(ngModel)]="search">
+    <button mat-button *ngIf="search" matSuffix mat-icon-button aria-label="Clear" (click)="search=''">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-form-field>
+
+<div *ngIf="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate" aria-label="chargement de données" style="margin: auto;"></mat-progress-spinner>
+</div>
+
+<mat-tab-group mat-align-tabs="center" *ngIf="!loading">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">check_circle</mat-icon>
+        </ng-template>
+        <div class="section-header">
+            <span class="section-title">Confirmés</span>
+        </div>
+        <!-- <div class="friend" *ngFor="let friend of myFriends"> -->
+        <div *ngFor="let friend of friends">
+            <mat-card *ngIf="friend.status === 'confirmed'">
+                <mat-card-header>
+                    <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                    <span class="fill-remaining-space"></span>
+                    <button mat-mini-fab class="plus-button" aria-label="Recommander" (click)="recommendFriend(friend, friend.pseudo)">
+                        <mat-icon>share</mat-icon>
+                    </button>
+                    <button mat-mini-fab class="plus-button" color="warn" aria-label="Ignorer demande" (click)="askConfirmationUnfriend(friend.id, friend.pseudo)">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-card-header>
+            </mat-card>        
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">help</mat-icon>
+        </ng-template>
+        <h3>Demandes</h3>
+        <div *ngFor="let friend of friends">
+            <mat-card *ngIf="friend.status === 'invited'">
+                <mat-card-header>
+                    <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                    <span class="fill-remaining-space"></span>
+                    <button mat-mini-fab class="plus-button" color="primary" aria-label="Ajouter amis" (click)="acceptFriend(friend.id)">
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+                    <button mat-mini-fab class="plus-button" color="warn" aria-label="Ignorer demande" (click)="ignore(friend.id)">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-card-header>
+            </mat-card>        
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">hourglass_full</mat-icon>
+        </ng-template>
+        <h3>En Atttente</h3>
+        <div *ngFor="let friend of friends">
+            <mat-card *ngIf="friend.status === 'waiting'">
+                <mat-card-header>
+                    <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                </mat-card-header>
+            </mat-card>        
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">record_voice_over</mat-icon>
+        </ng-template>
+        <h3>Recommandations</h3>
+        <div *ngFor="let friend of friends">
+            <mat-card *ngIf="friend.status === 'recommandation'">
+                <mat-card-header>
+                    <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                    <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                    <span class="fill-remaining-space"></span>
+                    <button mat-mini-fab class="plus-button" color="primary" aria-label="Ajouter amis" (click)="inviteFriend(friend.id)">
+                        <mat-icon>person_add</mat-icon>
+                    </button>
+                    <button mat-mini-fab class="plus-button" color="warn" aria-label="Ignorer demande" (click)="ignore(friend.id)">
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-card-header>
+            </mat-card>        
+        </div>
+    </mat-tab>
+</mat-tab-group>

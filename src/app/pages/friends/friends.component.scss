@@ -1,0 +1,35 @@
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+
+  .mat-card-header {
+      align-items: center;
+  }
+
+.mat-card-header, .mat-card-title {
+    margin-bottom: 0 !important;
+}
+
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
+
+.section-header{
+    display: block;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.plus-button {
+    margin: 5px;
+    overflow: visible;
+    box-shadow: none !important;
+}

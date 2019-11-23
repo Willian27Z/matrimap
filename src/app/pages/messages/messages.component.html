@@ -1,1 +1,12 @@
-<p>messages works!</p>
+<mat-toolbar>
+    <span>Messagerie Privé</span>
+</mat-toolbar>
+    
+    <!-- <button mat-button (click)="testNotif()">Notifier</button> -->
+    
+<mat-form-field class="">
+    <input matInput placeholder="Rechercher" [(ngModel)]="search">
+    <button mat-button *ngIf="search" matSuffix mat-icon-button aria-label="Clear" (click)="search=''">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-form-field>

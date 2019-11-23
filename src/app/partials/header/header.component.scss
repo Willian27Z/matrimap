@@ -2,10 +2,14 @@ h1 a {
     text-decoration: none;
     :hover{
         color: #007856;
+        cursor: pointer;
     }
 }
 
-
+.home-button {
+    text-decoration: none;
+    color: white;
+}
 
 .nav-link {
     display: inline-flex;
@@ -15,7 +19,7 @@ h1 a {
 
 .spacer {
     flex: 1 1 auto;
-  }
+}
 
 .main-nav {
     display: flex;

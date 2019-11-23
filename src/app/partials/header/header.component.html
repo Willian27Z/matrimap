@@ -32,18 +32,19 @@
 <!--Member Menu-->
 
 <div *ngIf="isAuthenticated">
-    <mat-toolbar>
-        <span><a routerLink="/" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}">Matrimap</a></span>
-        <span class="spacer"></span>
-        <!-- <span>
-            <mat-form-field floatLabel="never">
-                <input matInput type="search" placeholder="Rechercher">
-            </mat-form-field>
-        </span> -->
-        <span><a mat-icon-button color="primary" (click)="deconnexion()" aria-hidden="false" aria-label="deconnexion">
-            <mat-icon>power_settings_new</mat-icon></a></span>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <span><a class="home-button" routerLink="/" routerLinkActive="" [routerLinkActiveOptions]="{exact: true}">Matrimap</a> - {{userName? userName : ''}}</span>
+            <span class="spacer"></span>
+            <!-- <span>
+                <mat-form-field floatLabel="never">
+                    <input matInput type="search" placeholder="Rechercher">
+                </mat-form-field>
+            </span> -->
+            <span><a mat-icon-button color="accent" (click)="deconnexion()" aria-hidden="false" aria-label="deconnexion">
+                <mat-icon>power_settings_new</mat-icon></a></span>
+        </mat-toolbar-row>
     </mat-toolbar>
-    
     <nav class="main-nav">
         <a mat-icon-button color="primary" routerLink="monspace" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <mat-icon aria-hidden="false" aria-label="Accueil">home</mat-icon>

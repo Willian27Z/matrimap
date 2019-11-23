@@ -41,7 +41,7 @@
         </mat-error>
     </mat-form-field>
     
-    <mat-form-field class="login-form">
+    <mat-form-field class="login-input-form">
         <input matInput type="password" placeholder="Mot de Passe" formControlName="password">
         <mat-hint>Minimum 6 caractères</mat-hint>
         <mat-error *ngIf="signupForm.controls.password.hasError('minLength') && !signupForm.controls.password.hasError('required')">
@@ -51,7 +51,7 @@
             Le mot de passe est <strong>obligatoire</strong>
         </mat-error>
     </mat-form-field>
-    <mat-form-field class="login-form">
+    <mat-form-field class="login-input-form">
         <input matInput type="password" placeholder="Confirmez le Mot de Passe" formControlName="password2">
     </mat-form-field>
     <mat-error *ngIf="signupForm.hasError('passwordsDontMatch')">

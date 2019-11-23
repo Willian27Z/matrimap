@@ -1,0 +1,54 @@
+mat-grid-tile {
+    border: 1px solid black;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: visible;
+    text-align: center;
+}
+
+.fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+       Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+}
+
+.amis-attente{
+    display: block;
+    font-size: 0.7em;
+    color: darkslategray;
+    flex: auto;
+}
+
+.plus-button {
+    margin: 5px;
+    overflow: visible;
+    box-shadow: none !important;
+}
+
+.section-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px auto;
+    
+}
+
+.message-card {
+    max-width: 400px;
+    margin-bottom: 15px;
+}
+  
+.example-header-image {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}

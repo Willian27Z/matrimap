@@ -1,0 +1,19 @@
+<h1 mat-dialog-title style="text-align: center;">Recommander</h1>
+<div mat-dialog-content class="mat-typography">    
+    <p>À quel amis vous voulez recommander {{data.pseudo}}?</p>
+    <div *ngFor="let friend of data.friends">
+        <mat-card *ngIf="friend.status === 'confirmed' && friend.id !== data.exception.id">
+            <mat-card-header>
+                <img mat-card-avatar class="" *ngIf="friend.avatar" [src]="friend.avatar" alt="profile picture">
+                <mat-card-title><a [routerLink]="'/membre/' + friend.id">{{friend.pseudo}}</a></mat-card-title>
+                <span class="fill-remaining-space"></span>
+                <button mat-mini-fab class="plus-button" color="primary" aria-label="recommander" [mat-dialog-close]="friend.id">
+                    <mat-icon>share</mat-icon>
+                </button>
+            </mat-card-header>
+        </mat-card>        
+    </div>
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+    <button mat-button (click)="onNoClick()">Annuler</button>
+</div>

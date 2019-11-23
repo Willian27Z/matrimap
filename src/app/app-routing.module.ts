@@ -20,7 +20,7 @@ import { ChatComponent } from './pages/chat/chat.component';
 
 // Main routes
 const routes: Routes = [
-  { path: "", component: HomeComponent},
+  { path: "", component: HomeComponent, pathMatch: "full"},
   { path: "about", component: AboutComponent},
   { path: "connexion", component: ConnexionComponent},
   { path: "inscription", component: InscriptionComponent},
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: "admin", component: AdminComponent},
   { path: "profil", component: ProfileComponent},
   { path: "monspace", component: MyspaceComponent},
-  { path: "membre", component: ScrapbookComponent},
+  { path: "membre/:id", component: ScrapbookComponent},
   { path: "amis", component: FriendsComponent},
   { path: "messagerie", component: MessagesComponent},
   { path: "discussion", component: DiscussionComponent},
