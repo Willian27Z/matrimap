@@ -1,0 +1,8 @@
+<mat-toolbar>
+    <span>Recommandations</span>
+</mat-toolbar>
+
+<form [formGroup]="form" (ngSubmit)="saveRecommends()" *ngIf="fields">
+    <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+    <button type="submit" mat-raised-button color="primary" [disabled]="form.untouched" style="margin: 15px">Sauvegarder</button>
+</form>

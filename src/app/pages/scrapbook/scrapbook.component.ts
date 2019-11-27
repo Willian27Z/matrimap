@@ -11,6 +11,10 @@ import { Friends } from 'src/app/models/friends.model';
 import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MessageDialog, CommentDialog } from 'src/app/partials/dialogs/dialogs.component';
+import { WebsocketService } from 'src/app/services/websocket.service';
+import { IOEvent } from 'src/app/models/chatMessage.model';
+import { HttpParams } from '@angular/common/http';
+import { throwIfEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-scrapbook',
@@ -24,6 +28,10 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
   handset: boolean = false;
   messages: Message[];
   profile: Profile;
+  isOnline: boolean = false;
+  recommandations: any;
+  currentInvitation: any;
+  accessChat: boolean = false;
   friends: Friends[];
   messages$: Subscription;
   profile$: Subscription;
@@ -37,7 +45,8 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
     private breakpointService: BreakpointService,
     private authService: AuthService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private socketService: WebsocketService
   ) { }
 
   ngOnInit() {
@@ -63,7 +72,11 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
     this.profile$ = this.storage.userView.subscribe(profileReceived => {
       this.profile = profileReceived;
       if(this.profile){
-        this.loading = false
+        this.loading = false;
+        this.socketService.checkFriend(this.profile.userID);
+        if(this.currentInvitation && this.currentInvitation.id === profileReceived.userID){
+          this.accessChat = true;
+        }
       } else {
         this.loading = true;
       }
@@ -81,7 +94,7 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
     // check if user is admin
     this.admin = this.authService.isAdmin();
 
-    // fetch messages
+    // fetch messages and check if friend is online
     this.route.params.subscribe((params: Params) => {
       let user = this.authService.getUserID();
       if(user === params.id){
@@ -95,24 +108,35 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
         this.api.getMemberScrapbook(params.id);
         this.api.getProfile(params.id);
         this.api.getFriends(params.id);
+        this.api.getRecommandations(params.id).subscribe(data => {
+          console.log("recommandations:");
+          console.log(data);
+          this.recommandations = data;
+        }, err => {
+          console.log(err);
+        })
       }
-      // Check if is not the user himself
-      // this.authService.currentUser.subscribe((user: User)=>{
-      //   console.log("checking if member same as user...");
-      //   console.log(user);
-      //   if(user && user.id === params.id){
-      //     this.router.navigate(["/monspace"]);
-      //   } else {
-      //     if(user && user.admin){
-      //       this.admin = true;
-      //     }
-      //     console.log("get member info: " + params.id);
-      //     this.api.getMemberScrapbook(params.id);
-      //     this.api.getProfile(params.id);
-      //   }
-      // });
+    });
 
-    })
+    this.socketService.onEvent(IOEvent.FRIEND).subscribe(data => {
+      console.log(data);
+      if(this.profile && data.id === this.profile.userID){
+        if(data.connected){
+          console.log("friend connected!");
+          this.isOnline = true;
+        } else {
+          console.log("friend disconnected!");
+          this.isOnline = false;
+        }
+      }
+    });
+
+    this.socketService.invitation.subscribe(data => {
+      this.currentInvitation = data;
+      if(this.profile && data.id === this.profile.userID){
+        this.accessChat = true;
+      }
+    });
   }
 
   deleteMessage(message: Message){
@@ -121,6 +145,16 @@ export class ScrapbookComponent implements OnInit, OnDestroy {
 
   inviteFriend(userID: string){
     this.api.inviteFriend(userID, "scrapbook");
+  }
+
+  inviteChat(profile: Profile){
+    this.socketService.inviteChat(profile);
+    this.router.navigate(["/chat"]);
+  }
+
+  acceptChat(profile: Profile){
+    this.socketService.joinChat(profile);
+    this.router.navigate(["/chat"]);
   }
 
   ngOnDestroy(){

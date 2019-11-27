@@ -20,8 +20,8 @@ mat-grid-tile {
 }
 
 .message-card {
-    max-width: 400px;
-    margin-bottom: 15px;
+    max-width: 500px;
+    margin: 0 auto 15px;
 }
 
 .plus-button {
@@ -38,4 +38,8 @@ mat-grid-tile {
 
 .example-card {
     max-width: 400px;
+}
+
+.user-link {
+    text-decoration: none;
 }

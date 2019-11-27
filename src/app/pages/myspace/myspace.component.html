@@ -1,13 +1,15 @@
 <mat-toolbar>
     <img mat-card-avatar class="example-header-image" *ngIf="profile && profile.avatar" [src]="profile.avatar" alt="profile picture">
-    <span>Mon Space</span>
+    <span>Mon Espace</span>
 </mat-toolbar>
+
+
 
 <div *ngIf="loading">
     <mat-progress-spinner color="primary" mode="indeterminate" aria-label="chargement de données" style="margin: auto;"></mat-progress-spinner>
 </div>
 
-<mat-tab-group *ngIf="handset && !loading" mat-align-tabs="center">
+<mat-tab-group *ngIf="!loading" mat-align-tabs="center">
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="">sms</mat-icon>
@@ -24,7 +26,7 @@
             <mat-card class="message-card">
                 <mat-card-header>
                     <img mat-card-avatar class="example-header-image" *ngIf="message.avatar" [src]="message.avatar" alt="profile picture">
-                    <mat-card-title><a [routerLink]="'/membre/' + message.author">{{message.userName}}</a></mat-card-title>
+                    <mat-card-title><a class="user-link" [routerLink]="'/membre/' + message.author">{{message.userName}}</a></mat-card-title>
                     <mat-card-subtitle>Le {{message.date | date:"dd/MM/yy"}} à {{message.date | date:"H:mm"}}</mat-card-subtitle>
                 </mat-card-header>
                 <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
@@ -32,7 +34,7 @@
                     <p>{{message.message}}</p>
                     <mat-divider></mat-divider>
                     <div *ngFor="let comment of message.comments" style="padding-left: 10px; padding-top: 10px;">
-                        <p>{{comment.userName}} a répondu:</p>
+                        <p><a class="user-link" [routerLink]="'/membre/' + comment.from">{{comment.userName}} </a>a répondu:</p>
                         <p>"{{comment.comment}}"</p>
                         <mat-divider></mat-divider>
                     </div>
@@ -50,32 +52,38 @@
         <ng-template mat-tab-label>
             <mat-icon class="">public</mat-icon>
         </ng-template>
-        <h3>Activité des mes amis</h3>
-        <p>...</p>
+        <h3>Recherche de Membre</h3>
+    
+        <!-- <form [formGroup]="search" (ngSubmit)="searchMembers()" *ngIf="fields">
+            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+            <button type="submit" mat-raised-button color="primary" [disabled]="form.untouched" style="margin: 15px">Rechercher</button>
+        </form> -->
+
+        <mat-form-field class="">
+            <input matInput type="text" placeholder="Rechercher" [formControl]="search">
+            <button mat-button *ngIf="search" matSuffix mat-icon-button aria-label="Clear" (click)="search.setValue('')">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        
+        <!-- <mat-card *ngFor="let result of searchResult">
+            <mat-card-header>
+                <img mat-card-avatar *ngIf="result.avatar" [src]="result.avatar" alt="profile picture">
+                <mat-card-title><a [routerLink]="'/membre/' + result.id">{{result.username}}</a></mat-card-title>
+                <mat-card-subtitle>{{result.prenom}} {{result.nom}}</mat-card-subtitle>
+            </mat-card-header>
+        </mat-card>      -->
+
+        <mat-list *ngFor="let element of searchResult">
+            <mat-list-item>
+                <img matListAvatar *ngIf="element.avatar" [src]="element.avatar" alt="profile picture">
+                <div matLine>
+                    <mat-card-title><a style="text-decoration: none;" [routerLink]="'/membre/' + element.id">{{element.username}}</a></mat-card-title>
+                    <mat-card-subtitle matLine>{{element.prenom}} {{element.nom}}</mat-card-subtitle>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
+
     </mat-tab>
 </mat-tab-group>
-
-<div *ngIf="!handset">
-    
-    <mat-grid-list cols="2" rowHeight="1:1">
-        <mat-grid-tile class="colonne">
-            <mat-grid-tile-header>
-                <h3>Mur de Messages</h3>
-                <button mat-mini-fab color="accent" aria-label="Ajouter sur Mur" (click)="console.log('clicked!')">
-                    <mat-icon>add</mat-icon>
-                </button>    
-            </mat-grid-tile-header>
-            <div class="message" *ngFor="let message of myMessages">
-                <p>Message de <strong>{{message.author}}</strong> le {{message.date}}</p>
-                <p>{{message.message}}</p>
-            </div>
-        </mat-grid-tile>
-        <mat-grid-tile class="colonne">
-            <mat-grid-tile-header>
-                <h1>Activité des mes amis</h1>
-            </mat-grid-tile-header>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit blanditiis dolorum nobis debitis, tempore possimus inventore eveniet perspiciatis? Sed voluptates quae sequi rerum sunt. Voluptatibus sint exercitationem quas non! Eligendi?</p>
-        </mat-grid-tile>
-    </mat-grid-list>
-          
-</div>

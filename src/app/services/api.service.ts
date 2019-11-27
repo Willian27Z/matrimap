@@ -7,6 +7,7 @@ import { Profile } from '../models/profile.model';
 import { Friends } from '../models/friends.model';
 import { AuthService } from './auth.service';
 import { NotificationService, Notification } from './notification.service';
+import { MyProfile } from '../models/myProfile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,8 @@ export class ApiService {
   }
 
   // will PATCH and existant message (check if author or recipient and change date as well)
-  updateMessage(message: Message) {
-  }
+  // updateMessage(message: Message) {
+  // }
 
   // will DELETE an existant message from database (check if author or recipient)
   deleteMessage(message: Message, scrapbook:boolean) {
@@ -103,6 +104,52 @@ export class ApiService {
       console.log(resData);
       // will store user profile with storage service
       this.storageService.userView.next(resData)
+    });
+  }
+
+  // Will GET My profile info for the user
+  getMyProfile(){
+    console.log("Requesting GET /api/profile");
+    this.http.get<MyProfile>(environment.API + "/api/profile").subscribe(resData => {
+      console.log("got my profile:");
+      console.log(resData);
+      // will store user profile with storage service
+      this.storageService.myProfile.next(resData)
+    });
+  }
+
+  updateProfile(profile){
+    console.log("Requesting POST /api/profile");
+    this.http.post<Notification>(environment.API + "/api/profile", profile).subscribe(resData => {
+      
+      this.notificationService.pushNotification(resData);
+    }, err => {
+      this.notificationService.pushNotification({message: "Un erreur s'est produit. Profil non actualisé", type: "error"});
+    });
+  }
+  updatePrefs(prefs){
+    console.log("Requesting POST /api/profile");
+    this.http.post<Notification>(environment.API + "/api/prefs", prefs).subscribe(resData => {
+      
+      this.notificationService.pushNotification(resData);
+    }, err => {
+      this.notificationService.pushNotification({message: "Un erreur s'est produit. Préférences non actualisés", type: "error"});
+    });
+  }
+
+  getRecommandations(id:string){
+    return this.http.get(environment.API + "/api/recommend/" + id)
+  }
+
+  saveRecommends(body){
+    console.log("Requesting POST /api/profile");
+    console.log(body);
+    this.http.post<Notification>(environment.API + "/api/recommend", body).subscribe(resData => {
+      
+      this.notificationService.pushNotification(resData);
+    }, err => {
+      console.log(err);
+      this.notificationService.pushNotification({message: "Un erreur s'est produit. Préférences non actualisés", type: "error"});
     });
   }
 
@@ -252,20 +299,6 @@ export class ApiService {
     });
   }
 
-  testNotif(){
-    this.notificationService.pushNotification({message:"test de notification", type:"success"});
-  }
-  // getPossibleFriendRecommendations(){
-  //   console.log("requesting GET /api/friends/recommend");
-  //   this.http.get(environment.API + "/api/friends/recommend").subscribe(resData => {
-  //     console.log("message retrieved from unfriend request:");
-  //     console.log(resData);
-
-  //     // will store friends with storage service
-  //     this.getFriends(this.authService.getUserID());
-  //   });
-  // }
-
   getDiscussions(){
     console.log("requesting GET /api/discussions");
 
@@ -280,5 +313,89 @@ export class ApiService {
       console.log(error);
       this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
     });
+  }
+  
+  newDiscussion(discussion: any){
+    console.log("requesting POST /api/discussions");
+
+    this.http.post<Notification>(environment.API + "/api/discussions", discussion).subscribe(resData => {
+      
+      // Display notification
+      this.notificationService.pushNotification(resData);
+      // refresh discussions
+      this.storageService.discussions.next(null);
+      this.getDiscussions();
+
+    }, error => {
+      console.log(error);
+      this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
+    });
+  }
+
+  deleteDiscussion(id: string){
+    console.log("requesting DELETE /api/discussions/" + id);
+
+    this.http.delete<Notification>(environment.API + "/api/discussions/" + id).subscribe(resData => {
+      
+      // Display notification
+      this.notificationService.pushNotification(resData);
+      // refresh discussions
+      this.storageService.discussions.next(null);
+      this.getDiscussions();
+
+    }, error => {
+      console.log(error);
+      this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
+    });
+  }
+
+  postToDiscussion(message: any, id: string){
+    console.log("requesting POST /api/discussions/" + id);
+
+    this.http.post<Notification>(environment.API + "/api/discussions/" + id, message).subscribe(resData => {
+      
+      // Display notification
+      this.notificationService.pushNotification(resData);
+      // refresh discussions
+      this.storageService.discussions.next(null);
+      this.getDiscussions();
+
+    }, error => {
+      console.log(error);
+      this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
+    });
+  }
+
+  deleteMessageFromDiscussion(message: any, id: string){
+    console.log("requesting POST /api/discussions/delete/" + id);
+
+    this.http.post<Notification>(environment.API + "/api/discussions/delete/" + id, message).subscribe(resData => {
+      
+      // Display notification
+      this.notificationService.pushNotification(resData);
+      // refresh discussions
+      this.storageService.discussions.next(null);
+      this.getDiscussions();
+
+    }, error => {
+      console.log(error);
+      this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
+    });
+  }
+  
+  lostPassword(email: string){
+
+    this.http.get<Notification>(environment.API + "/user/lostpassword", {params: {email: email}}).subscribe(resData => {
+
+      this.notificationService.pushNotification(resData);
+    }, error => {
+
+      this.notificationService.pushNotification({message: "Une erreur s'est produit", type:"error"});
+    });
+  }
+
+  searchMember(name: string){
+    console.log("search request for " + name);
+    return this.http.get(environment.API + "/api/search", {params: {name: name}});
   }
 }

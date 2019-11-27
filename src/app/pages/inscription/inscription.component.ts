@@ -26,6 +26,7 @@ export class InscriptionComponent implements OnInit {
     ]),
     username: new FormControl('', [
       Validators.minLength(3),
+      Validators.maxLength(20),
       Validators.required,
     ]),
     password: new FormControl('',[

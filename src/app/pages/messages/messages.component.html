@@ -1,12 +1,60 @@
 <mat-toolbar>
     <span>Messagerie Privé</span>
 </mat-toolbar>
+
+<div *ngIf="loading">
+    <mat-progress-spinner color="primary" mode="indeterminate" aria-label="chargement de données" style="margin: auto;"></mat-progress-spinner>
+</div>
+
+<mat-sidenav-container *ngIf="!loading && discussions">
+    <mat-sidenav #sidenav mode="over">
+        <button mat-button class="discButton" *ngFor="let disc of discussions" (click)="select(disc.id);sidenav.toggle();">{{disc.subject}}</button>
+    </mat-sidenav>
     
-    <!-- <button mat-button (click)="testNotif()">Notifier</button> -->
-    
-<mat-form-field class="">
-    <input matInput placeholder="Rechercher" [(ngModel)]="search">
-    <button mat-button *ngIf="search" matSuffix mat-icon-button aria-label="Clear" (click)="search=''">
-        <mat-icon>close</mat-icon>
-    </button>
-</mat-form-field>
+    <mat-sidenav-content>
+        <button mat-button (click)="sidenav.toggle()">Voir toutes les conversations</button>
+        <button mat-button (click)="newDiscussionDialog()" aria-label="Nouvelle discussion">Nouvelle conversation</button>
+        <button mat-button (click)="deleteDiscussion()" color="warn" *ngIf="selectedDiscussion && selectedDiscussion.editable" aria-label="Supprimer discussion">Supprimer conversation</button>
+
+        
+
+        <div *ngIf="selectedDiscussion" [ngModel]="selectedDiscussion" ngDefaultControl>
+            <h3 style="text-align: center;">{{selectedDiscussion.subject}}</h3>
+            <span>Participants:</span>
+            <mat-chip-list class="participants">
+                <mat-chip color="primary" selected><a class="part-link" [routerLink]="'/membre/' + selectedDiscussion.owner.id">{{selectedDiscussion.owner.username}}</a></mat-chip>
+                <mat-chip *ngFor="let part of selectedDiscussion.participants"><a class="message-link" [routerLink]="'/membre/' + part.id">{{part.username}}</a></mat-chip>
+            </mat-chip-list>
+
+            <mat-form-field class="messageInput" appearance="outline">
+                <mat-label>Envoyer un message</mat-label>
+                <textarea matInput [(ngModel)]="messageToSend" [formControl]="messageCtrl"></textarea>
+            </mat-form-field>
+            <button mat-mini-fab color="primary" (click)=sendMessage() [disabled]="!messageToSend" style="margin-left: 10px;"><mat-icon>send</mat-icon></button>
+
+            <mat-divider style="margin-top: 5px;"></mat-divider>
+
+            <mat-list *ngIf="selectedDiscussion">
+
+                <div *ngFor="let element of selectedDiscussion.messages">
+                    <mat-list-item>
+                        <img matListAvatar *ngIf="element.author.avatar" [src]="element.author.avatar" alt="profile picture">
+                        <div matLine>
+                            <mat-card-title><a class="message-link" [routerLink]="'/membre/' + element.author.id">{{element.author.username}}</a></mat-card-title>
+                            <mat-card-subtitle matLine>Le {{element.date | date:"dd/MM/yy"}} à {{element.date | date:"H:mm"}}</mat-card-subtitle>
+                        </div>
+                        <button mat-mini-fab color="warn" (click)=deleteMessage(element) *ngIf="element.editable"><mat-icon>delete</mat-icon></button>
+                    
+                    </mat-list-item>
+                    <p class="message">{{element.message}}</p>
+                    <mat-divider></mat-divider>
+                </div>
+                
+            </mat-list>
+
+            
+
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

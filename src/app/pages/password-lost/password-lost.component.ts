@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { FormlyFieldConfig } from '@ngx-formly/core';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-password-lost',
@@ -7,9 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PasswordLostComponent implements OnInit {
 
-  constructor() { }
+  constructor(private api: ApiService) { }
+
+  form = new FormGroup({});
+  model: any = {};
+  fields: FormlyFieldConfig[] = [{
+    key: "email",
+    type: "input",
+    templateOptions: {
+        type: "email",
+        label: "email",
+        required: true
+    }
+  }]
 
   ngOnInit() {
+  }
+
+  lostPassword(){
+    console.log(this.model);
+    this.api.lostPassword(this.model.email);
   }
 
 }

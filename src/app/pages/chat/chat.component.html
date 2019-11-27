@@ -1,1 +1,51 @@
-<p>chat works!</p>
+<div class="content-wrapper">
+    <div class="users">
+        <div class="profile">
+            <h3>{{me.username}}</h3>
+            <p *ngIf="other.status === 'Connecté'">En Cours 
+                <button mat-mini-fab color="warn" (click)=endChat() style="margin-left: 5px;"><mat-icon>cancel</mat-icon></button>
+            </p>
+            <p *ngIf="other.status === 'Rejoindre'">
+                <button mat-raised-button color="primary" (click)="joinChat()">Rejoindre</button>
+            </p>
+            <p *ngIf="other.status === 'En attente'">En attente</p>
+            <p *ngIf="other.status === 'Déconnecté'">Déconnecté</p>
+            <p *ngIf="other.status === 'Pas d\'invité'">Pas d'invité</p>
+        </div>
+        <div class="profile">
+            <h3>{{other.username}}</h3>
+            
+            <p *ngIf="other.status === 'Connecté'">En cours</p>
+            <p *ngIf="other.status === 'Rejoindre'">En attente</p>
+            <p *ngIf="other.status === 'En attente'">En attente</p>
+            <p *ngIf="other.status === 'Déconnecté'">Déconnecté</p>
+            <p *ngIf="other.status === 'Pas d\'invité'">Pas d'invité</p>
+        </div>
+    </div>
+    
+    <!-- <div *ngIf="other.status !== 'Connecté'"> -->
+        <div class="message-board" *ngIf="other.status === 'Connecté'">
+            <mat-card *ngFor="let message of messages" [ngClass]="message.author === me.username ? 'my-message' : 'other-message'">
+                <!-- <mat-card-header>
+                    <mat-card-title></mat-card-title>
+                    <mat-card-subtitle></mat-card-subtitle>
+                </mat-card-header> -->
+                <mat-card-content [ngClass]="message.author === me.username ? 'my-message' : 'other-message'">
+                    <strong>{{message.author === me.username ? 'Moi' : message.author}}</strong> - 
+                    {{message.date | date:"H:mm"}}
+                    <p>{{message.message}}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        
+        <div class="messageInput" *ngIf="other.status === 'Connecté'">
+            <mat-form-field appearance="outline">
+                <mat-label>Envoyer un message</mat-label>
+                <input id="messageInput" matInput  type="text" [(ngModel)]="input" ngSubmit="sendMessage()">
+            </mat-form-field>
+            <button mat-mini-fab color="primary" (click)=sendMessage() [disabled]="!input" style="margin-left: 5px;"><mat-icon>send</mat-icon></button>
+            
+        </div>
+    <!-- </div> -->
+
+</div>

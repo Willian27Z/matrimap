@@ -21,7 +21,37 @@
 // @import "../node_modules/bootstrap/scss/grid";
 
 
-html, body { height: 100%; }
+//@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material.
+@include mat-core();
+
+// Define the default theme
+$matrimap-app-primary: mat-palette($mat-teal);
+$matrimap-app-accent:  mat-palette($mat-amber, A200, A100, A700);
+$matrimap-app-theme:   mat-light-theme($matrimap-app-primary, $matrimap-app-accent);
+
+// Include the default theme styles.
+@include angular-material-theme($matrimap-app-theme);
+
+
+// Define an alternate theme.
+$dark-primary: mat-palette($mat-blue-grey);
+$dark-accent:  mat-palette($mat-amber, A200, A100, A400);
+$dark-warn:    mat-palette($mat-deep-orange);
+$dark-theme:   mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+// Include the alternative theme styles inside of a block with a CSS class
+.unicorn-dark-theme {
+  @include angular-material-theme($dark-theme);
+}
+
+
+
+html, body { height: 100%; max-width: 1024px; margin: auto; padding: 0 5px}
 body { font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .notif-success {
@@ -43,5 +73,3 @@ body { font-family: Roboto, "Helvetica Neue", sans-serif; }
     background: white;
     color: black;
 }
-
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';

@@ -12,6 +12,16 @@
             <mat-icon>person_add</mat-icon>
         </button>
     </span>
+    <span style="overflow: visible;" *ngIf="profile && profile.friend === 'confirmed' && isOnline && !accessChat">
+        <button mat-mini-fab class="plus-button" color="primary" aria-label="Ajouter amis" (click)="inviteChat(profile)">
+            <mat-icon>chat</mat-icon>
+        </button>
+    </span>
+    <span style="overflow: visible;" *ngIf="profile && profile.friend === 'confirmed' && isOnline && accessChat">
+        <button mat-mini-fab class="plus-button" color="accent" aria-label="Ajouter amis" (click)="acceptChat(profile)">
+            <mat-icon>chat</mat-icon>
+        </button>
+    </span>
 </mat-toolbar>
 <span style="overflow: visible;" class="amis-attente" *ngIf="profile && profile.friend === 'confirmed'">Amis depuis le {{profile.friendSince | date:"dd/MM/yy"}}</span>
 <span style="overflow: visible;" class="amis-attente" *ngIf="profile && profile.friend === 'waiting'">(demande d'amis en attente)</span>
@@ -51,7 +61,7 @@
                         <mat-divider></mat-divider>
                     </div>
                 </mat-card-content>
-                <mat-card-actions *ngIf="profile.friend === 'confirmed' || admin">
+                <mat-card-actions *ngIf="profile && profile.friend === 'confirmed' || admin">
                     <button mat-raised-button color="primary"  (click)="newCommentDialog(message)">Commenter {{message.comments.length ? '(' + message.comments.length + ')' : '' }}</button>
                     <!-- <button mat-raised-button color="accent" *ngIf="message.editable"><mat-icon>edit</mat-icon></button> -->
                     <button mat-raised-button color="warn" *ngIf="message.editable" (click)="deleteMessage(message)"><mat-icon>delete</mat-icon></button>
@@ -85,6 +95,90 @@
             <mat-list-item> Nom: {{profile? profile.nom : 'privé'}} </mat-list-item>
             <mat-list-item> Prénom: {{profile? profile.prenom : 'privé'}} </mat-list-item>
             <mat-list-item> Email: {{profile? profile.email : 'privé'}} </mat-list-item>
+            <mat-list-item> Age: {{profile? profile.age : 'privé'}} </mat-list-item>
+            <mat-list-item> Genre: {{profile? profile.genre : 'privé'}} </mat-list-item>
+            <mat-list-item> Coordonées: {{profile? profile.coordonees : 'privé'}} </mat-list-item>
+            <mat-list-item> Presentation: {{profile? profile.presentation : 'privé'}} </mat-list-item>
+        </mat-list>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">rate_review</mat-icon>
+        </ng-template>
+        <h3>Recommandations</h3>
+        <mat-list *ngIf="recommandations">
+            <mat-list-item *ngIf="recommandations.lieu">
+                <mat-divider></mat-divider>
+                <h5 matLine>Lieu</h5>
+                <p matLine><strong>{{recommandations.lieu.societe ? recommandations.lieu.societe : 'Pas de recommandation'}}</strong></p>
+                <p matLine>{{recommandations.lieu.avis ? recommandations.lieu.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.traiteur">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Traiteur</h5>
+                 <p matLine><strong>{{recommandations.traiteur.societe ? recommandations.traiteur.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.traiteur.avis ? recommandations.traiteur.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.decorations">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Décorations</h5>
+                 <p matLine><strong>{{recommandations.decorations.societe ? recommandations.decorations.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.decorations.avis ? recommandations.decorations.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.fleuriste">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Fleuriste</h5>
+                 <p matLine><strong>{{recommandations.fleuriste.societe ? recommandations.fleuriste.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.fleuriste.avis ? recommandations.fleuriste.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.musique">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Musique</h5>
+                 <p matLine><strong>{{recommandations.musique.societe ? recommandations.musique.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.musique.avis ? recommandations.musique.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.artiste">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Artiste</h5>
+                 <p matLine><strong>{{recommandations.artiste.societe ? recommandations.artiste.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.artiste.avis ? recommandations.artiste.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.vetements">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Tenue</h5>
+                 <p matLine><strong>{{recommandations.vetements.societe ? recommandations.vetements.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.vetements.avis ? recommandations.vetements.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.photography">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Photographie</h5>
+                 <p matLine><strong>{{recommandations.photography.societe ? recommandations.photography.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.photography.avis ? recommandations.photography.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.video">
+                <mat-divider></mat-divider>
+                 <h5 matLine> Vidéo</h5>
+                 <p matLine ><strong>{{recommandations.video.societe ? recommandations.video.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine >{{recommandations.video.avis ? recommandations.video.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.souvenir">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Souvenir</h5>
+                 <p matLine><strong>{{recommandations.souvenir.societe ? recommandations.souvenir.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.souvenir.avis ? recommandations.souvenir.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.luneDeMiel">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Lune De Miel</h5>
+                 <p matLine><strong>{{recommandations.luneDeMiel.societe ? recommandations.luneDeMiel.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.luneDeMiel.avis ? recommandations.luneDeMiel.avis : ''}}</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="recommandations.planner">
+                <mat-divider></mat-divider>
+                 <h5 matLine>Wedding Planner</h5>
+                 <p matLine><strong>{{recommandations.planner.societe ? recommandations.planner.societe : 'Pas de recommandation'}}</strong></p>
+                 <p matLine>{{recommandations.planner.avis ? recommandations.planner.avis : ''}}</p>
+            </mat-list-item>
         </mat-list>
     </mat-tab>
 </mat-tab-group>

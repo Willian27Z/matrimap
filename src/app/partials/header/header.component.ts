@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth.service';
 import { BreakpointService } from 'src/app/services/breakpoint.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-header',
@@ -61,5 +60,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(){
     this.userSub.unsubscribe();
+    this.notification$.unsubscribe();
   }
 }

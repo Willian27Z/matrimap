@@ -7,6 +7,8 @@ export class Friends {
         public status: string,
         public date: string,
         public pseudo: string,
+        public nom: string,
+        public prenom: string,
         public avatar: string,
         public recommendedBy: string,
     ){}

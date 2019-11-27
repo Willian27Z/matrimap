@@ -9,6 +9,8 @@ import { User } from '../models/user.model';    //The model to store the informa
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
 import { NotificationService } from './notification.service';
+import { WebsocketService } from './websocket.service';
+import { IOEvent } from '../models/chatMessage.model';
 
 //The expected response format from the server when authenticating a user
 export interface AuthResponseData {
@@ -41,7 +43,8 @@ export class AuthService {
         private router: Router,
         private route: ActivatedRoute,
         private storage: StorageService,
-        private notification: NotificationService
+        private notification: NotificationService,
+        private socketService: WebsocketService
     ){}
 
     // For signin-up
@@ -52,8 +55,19 @@ export class AuthService {
             //console.log(resData);
             if(resData.success){
                 this.handleAuthentication(resData.email, resData.username, resData.id, resData.admin, resData.token, resData.expiresIn);
+
+                // Applying to local variable for easy access
+                this.userID = resData.id;
+                this.username = resData.username;
+                this.admin = resData.admin;
+                // connection to socket.io
+                // this.socketService.initSocket(resData.id, resData.username);
+                // this.socketService.onEvent(IOEvent.CONNECT).subscribe(()=>{
+                //     this.socketService.identify(resData.id, resData.username, resData.email);
+                // })
             }
-            this.notification.pushNotification({message: resData.message, type: resData.type})
+            this.notification.pushNotification({message: resData.message, type: resData.type});
+
         }));
     }
 
@@ -70,13 +84,23 @@ export class AuthService {
         .pipe(tap(resData => {
             if(resData.success){
                 this.handleAuthentication(resData.email, resData.username, resData.id, resData.admin, resData.token, resData.expiresIn);
+
+                // Applying to local variable for easy access
+                this.userID = resData.id;
+                this.username = resData.username;
+                this.admin = resData.admin;
+                // connection to socket.io
+                // this.socketService.initSocket(resData.id, resData.username);
+                // this.socketService.onEvent(IOEvent.CONNECT).subscribe(()=>{
+                //     this.socketService.identify(resData.id, resData.username, resData.email);
+                // })
             }
-            this.notification.pushNotification({message: resData.message, type: resData.type})
+            this.notification.pushNotification({message: resData.message, type: resData.type});
         }));
     }
 
     // Checks at app loading if the user has a valid token in local storage to log in
-    async autoLogin() {
+    autoLogin() {
         // retrieving data
         const userData: {
             email: string,
@@ -104,6 +128,13 @@ export class AuthService {
             this.username = loadedUser.username;
             this.admin = loadedUser.admin;
 
+            // connection to socket.io
+            this.socketService.identify(loadedUser.id, loadedUser.username, loadedUser.email);
+            // this.socketService.initSocket(loadedUser.id, loadedUser.username);
+            // this.socketService.onEvent(IOEvent.CONNECT).subscribe(()=>{
+            //     this.socketService.identify(loadedUser.id, loadedUser.username, loadedUser.email);
+            // })
+
             // check if admin
             this.http.get<{admin: boolean}>(environment.API + "/user/admin/" + loadedUser.id).subscribe(resData => {
                 console.log("Is user admin? : " + resData.admin);
@@ -127,6 +158,7 @@ export class AuthService {
             clearTimeout(this.logoutTimer);
         }
         this.notification.pushNotification({message: "Vous êtes deconnecté(e). A bientôt!", type: "success"});
+        // this.socketService.disconnect();
     }
 
     autoLougout(timeToExpiration: number){
@@ -149,6 +181,8 @@ export class AuthService {
         this.userID = id;
         this.username = username;
         this.admin = admin;
+        // register for socket.io
+        this.socketService.identify(id, username, email);
         // start autologout counter
         this.autoLougout(expiration * 1000);
         this.router.navigate(["/monspace"]);
@@ -162,6 +196,10 @@ export class AuthService {
 
     getUserID(){
         return this.userID;
+    }
+
+    getUsername(){
+        return this.username;
     }
 
     isAdmin(){

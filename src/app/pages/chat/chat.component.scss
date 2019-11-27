@@ -1,0 +1,53 @@
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.users {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+}
+
+.profile {
+    text-align: center;
+}
+
+.chat-wrapper {
+    background: red;
+    
+    //height: max-content;
+}
+
+.message-board {
+    flex: 1;
+    // position: fixed;
+    // top: 10%;
+    // bottom: 10%;
+    // height: 50%;
+    overflow-x: scroll !important;
+    padding-bottom: 89px;
+}
+
+.messageInput {
+    position: fixed;
+    bottom: 0;
+    height: 80px;
+    width:100%;
+    resize: none;
+    background: white;
+
+}
+mat-form-field .messageInput {
+    width: 85%
+}
+
+.my-message {
+    text-align: left;
+    background: lightgreen;
+}
+
+.other-message {
+    text-align: right;
+}

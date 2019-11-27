@@ -1,1 +1,26 @@
-<p>profile works!</p>
+<mat-toolbar>
+    Mon Profil
+</mat-toolbar>
+
+<mat-tab-group mat-align-tabs="center" *ngIf="!loading">
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">face</mat-icon>
+        </ng-template>
+        <p>Vous pouvez changer vos informations personnelles ici:</p>
+        <form [formGroup]="form" (ngSubmit)="changeProfile()" *ngIf="fields">
+            <formly-form [model]="model" [fields]="fields" [options]="options" [form]="form"></formly-form>
+            <button type="submit" mat-raised-button color="primary" [disabled]="form.untouched" style="margin: 15px">Sauvegarder</button>
+        </form>
+    </mat-tab>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="">email</mat-icon>
+        </ng-template>
+        <p>Vous pouvez changer vos préferences de notification par email ici:</p>
+        <form [formGroup]="prefForm" (ngSubmit)="changePrefs()" *ngIf="fields">
+            <formly-form [model]="prefModel" [fields]="prefFields" [options]="options" [form]="prefForm"></formly-form>
+            <button type="submit" mat-raised-button color="primary" [disabled]="form.untouched" style="margin: 15px">Sauvegarder</button>
+        </form>
+    </mat-tab>
+</mat-tab-group>

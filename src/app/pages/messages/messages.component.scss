@@ -1,0 +1,51 @@
+.discButton {
+    display: block;
+    margin: auto;
+}
+
+.avatar-image {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.message {
+    margin: 0 15px 15px;
+}
+
+.messageInput {
+    min-width: 150px; 
+    max-width: 500px; 
+    width: 100%;
+    margin-top: 5px;
+}
+
+.message-link {
+    text-decoration: none;
+
+    :hover {
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
+.mat-card-title {
+    font-size: 1em !important;
+}
+
+.mat-card-subtitle {
+    margin-bottom: 0 !important;
+}
+
+.participants {
+    margin-bottom:10px; 
+    align-content: center;
+    justify-content: center;
+}
+
+.part-link {
+    color: white;
+    text-decoration: none;
+}

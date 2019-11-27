@@ -1,0 +1,60 @@
+<h1 mat-dialog-title style="text-align: center;">Nouvelle Discussion</h1>
+
+<div mat-dialog-content style="text-align: center;">
+    <p>Entrez les informations pour démarrer une nouvelle conversation privée</p>
+    
+    <mat-form-field style="min-width: 150px; max-width: 500px; width: 100%;" appearance="outline">
+        <mat-label>Sujet de la Discussion</mat-label>
+        <input matInput type="text" placeholder="Sujet" [(ngModel)]="data.subject" maxlength="100" required [formControl]="subjectCtrl" ShowOnDirtyErrorStateMatcher>
+        <mat-hint>Limite de 100 caractères ({{100 - data.subject.length}} restants)</mat-hint>
+        <mat-error *ngIf="subjectCtrl.hasError('required')">
+            Le sujet est obligatoire
+        </mat-error>
+    </mat-form-field>
+    
+    <p>Qui voulez-vous inviter à cette discussion?</p>
+    <p class="error" *ngIf="friendCtrl.touched && !selectedFriends.length">Il faut ajouter au moins un ami</p>
+    
+    <mat-form-field style="min-width: 150px; max-width: 500px; width: 100%;">
+        <mat-chip-list #friendList aria-label="Selection d'amis">
+
+            <mat-chip
+            *ngFor="let friend of selectedFriends"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(friend)">
+            {{friend.pseudo}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            
+            <input
+            aria-label="Selectioner des amis"
+            placeholder="Selectionez vos amis"
+            #friendInput
+            [formControl]="friendCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="friendList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)">
+
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.pseudo">
+            {{friend.pseudo}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+    <p>Ecrivez le message initial:</p>
+    <mat-form-field style="min-width: 150px; max-width: 500px; width: 100%;" appearance="outline">
+        <mat-label>Message initial</mat-label>
+        <textarea matInput required [(ngModel)]="data.messageInitial" [formControl]="messageCtrl" ShowOnDirtyErrorStateMatcher></textarea>
+        <mat-error *ngIf="subjectCtrl.hasError('required')">
+            Il faut un message initial
+        </mat-error>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+    <button mat-button (click)="onNoClick()">Annuler</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="subjectCtrl.hasError('required') || messageCtrl.hasError('required') || !selectedFriends.length">Commencer</button>
+</div>

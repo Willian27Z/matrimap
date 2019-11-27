@@ -7,26 +7,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 //import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-// Material Modules
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { LayoutModule } from '@angular/cdk/layout';
 import { TextFieldModule } from '@angular/cdk/text-field';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog'; 
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+// Material Modules
+import { MaterialModule } from './material-module';
+// Formly
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
+import { ArrayTypeComponent } from './pages/recommendations/array.type';
+import { ObjectTypeComponent } from './pages/recommendations/object.type';
 
 // My components
 import { AppComponent } from './app.component';
@@ -43,15 +34,17 @@ import { MyspaceComponent } from './pages/myspace/myspace.component';
 import { ScrapbookComponent } from './pages/scrapbook/scrapbook.component';
 import { FriendsComponent } from './pages/friends/friends.component';
 import { MessagesComponent } from './pages/messages/messages.component';
-import { DiscussionComponent } from './pages/discussion/discussion.component';
+import { RecommendComponent } from './pages/recommendations/recommend.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { NotificationComponent } from './partials/notification/notification.component'
 import { AuthInterceptorService } from './services/auth-interceptor.service';
-import { ConfirmationDialog, MessageDialog, CommentDialog, RecommandationDialog } from './partials/dialogs/dialogs.component';
+import { ConfirmationDialog, MessageDialog, CommentDialog, RecommandationDialog, NewDiscussionDialog } from './partials/dialogs/dialogs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ArrayTypeComponent,
+    ObjectTypeComponent,
     HeaderComponent,
     ConnexionComponent,
     AboutComponent,
@@ -65,13 +58,14 @@ import { ConfirmationDialog, MessageDialog, CommentDialog, RecommandationDialog 
     ScrapbookComponent,
     FriendsComponent,
     MessagesComponent,
-    DiscussionComponent,
+    RecommendComponent,
     ChatComponent,
     NotificationComponent,
     MessageDialog,
     CommentDialog,
     ConfirmationDialog,
-    RecommandationDialog
+    RecommandationDialog,
+    NewDiscussionDialog
   ],
   imports: [
     BrowserModule,
@@ -80,30 +74,25 @@ import { ConfirmationDialog, MessageDialog, CommentDialog, RecommandationDialog 
     //FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatMenuModule,
-    MatButtonModule,
-    MatIconModule,
-    LayoutModule,
-    MatToolbarModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-    MatGridListModule,
-    MatCardModule,
-    MatDialogModule,
     TextFieldModule,
-    MatSnackBarModule
+    BrowserAnimationsModule,
+    LayoutModule,
+    MaterialModule,
+    FormlyModule.forRoot({
+      types: [
+        { name: 'string', extends: 'input' },
+        { name: 'array', component: ArrayTypeComponent },
+        { name: 'object', component: ObjectTypeComponent },
+      ]
+    }),
+    FormlyMaterialModule
   ],
   entryComponents: [
     MessageDialog,
     CommentDialog,
     ConfirmationDialog,
     RecommandationDialog,
+    NewDiscussionDialog,
     NotificationComponent
   ],
   providers: [

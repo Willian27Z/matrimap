@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Profile } from '../models/profile.model';
 import { Discussion } from '../models/discussion.model';
 import { Friends } from '../models/friends.model';
+import { MyProfile } from '../models/myProfile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class StorageService {
   /******************************* */
   // MY INFORMATION
   /******************************** */
+  myProfile = new BehaviorSubject<MyProfile>(null);
+  
   // Scrapbook Messages state
   myMessages = new BehaviorSubject<Message[]>(null);
   
@@ -32,6 +35,8 @@ export class StorageService {
     date: Date,     
     seenBy: string[]
   }[]>([]);
+
+  chatMessages: any[] = [];
 
   /******************************* */
   // FOR OTHER USERS

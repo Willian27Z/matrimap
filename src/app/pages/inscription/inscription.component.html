@@ -39,6 +39,9 @@
         <mat-error *ngIf="signupForm.controls.username.hasError('required')">
             Un nom d'utilisateur est <strong>obligatoire</strong>
         </mat-error>
+        <mat-error *ngIf="signupForm.controls.username.hasError('maxLength')">
+            Le limite de 20 caractères dépassé
+        </mat-error>
     </mat-form-field>
     
     <mat-form-field class="login-input-form">

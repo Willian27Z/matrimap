@@ -1,0 +1,42 @@
+{
+    "schema": {
+      "title": "A list of tasks",
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "title": "Le Membre qui a fait ces recommandations"
+        },
+        "avis": {
+          "type": "array",
+          "title": "Recommendations",
+          "items": {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "service": {
+              "company": {
+                "type": "string",
+                "title": "Compagnie ou personne",
+                "description": "La société ou personne à recommender"
+              },
+              "societe": {
+                "type": "string",
+                "title": "Société ou personne",
+                "description": "La société ou personne à recommender"
+              },
+              "avis": {
+                "type": "string",
+                "title": "L'avis du membre concernant cette société ou personne",
+                "description": "Ce que le membre a à dire de cette société ou personne"
+              }
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
+import { WebsocketService } from './services/websocket.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,10 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit{
   title = 'matrimap';
   
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService, private socketService: WebsocketService){}
 
   ngOnInit(){
+    this.socketService.initSocket();
     this.authService.autoLogin();
   }
 }

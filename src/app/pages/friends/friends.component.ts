@@ -99,8 +99,4 @@ export class FriendsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.friends$.unsubscribe();
   }
-
-  testNotif(){
-    this.api.testNotif();
-  }
 }
