@@ -16,7 +16,8 @@ export interface DialogData {
 
 export interface RecommandationData {
   friends: Friends[],
-  exception: Friends
+  exception: Friends,
+  pseudo: string
 }
 
 export interface DiscussionData {
